@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"strings"
 )
 
 type Client struct {
@@ -39,10 +40,28 @@ func HandleConn(conn net.Conn) {
 		n, err := conn.Read(buf)
 		if err != nil {
 			fmt.Println("conn.Read err", err)
+			delete(onlineMap, cliAddr.String())
 			message <- formatmsg(cli, "leave")
 			return
 		}
-		message <- formatmsg(cli, string(buf[:n])) //可能会阻塞？
+		msg := string(buf[:n-2]) //去除回车换行
+		if len(msg) == 3 && msg == "who" {
+			conn.Write([]byte("current user list:\n"))
+			for _, cli := range onlineMap {
+				msg = cli.Addr.String() + ":" + cli.Name + "\n"
+				conn.Write([]byte(msg))
+			}
+		} else if len(msg) > 8 && msg[:7] == "rename:" {
+			// rename:mike
+			slice := strings.Split(msg, ":")
+			cli.Name = slice[1]
+			//需要重新赋值给map
+			onlineMap[cli.Addr.String()] = cli
+			//fmt.Println("debug cli.Name:", cli.Name)
+			conn.Write([]byte("rename OK!\n"))
+		} else {
+			message <- formatmsg(cli, string(buf[:n])) //可能会阻塞？
+		}
 	}
 }
 func BroadCast() {
