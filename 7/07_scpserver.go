@@ -41,11 +41,11 @@ func receiveFile(conn net.Conn, filename string, filesize int) {
 
 func main() {
 	//更改进程运行目录
-	_, err := os.Stat("D:\\download")
+	_, err := os.Stat("E:\\download")
 	if err != nil {
 		if !os.IsExist(err) {
 			fmt.Println("path not exist, to create...\n")
-			err := os.Mkdir("D:\\download", 0700)
+			err := os.Mkdir("E:\\download", 0700)
 			if err != nil {
 				fmt.Println("os.Mkdir ", err)
 				return
@@ -56,7 +56,7 @@ func main() {
 		}
 	}
 
-	err = os.Chdir("D:\\download")
+	err = os.Chdir("E:\\download")
 	if err != nil {
 		//os.Mkdir("~/download", 0700)
 		fmt.Println("os.Chdir ", err)
