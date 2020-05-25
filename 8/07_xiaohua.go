@@ -5,12 +5,15 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 func HttpGet(url string, client *http.Client) (result []byte, err error) {
+	fmt.Println("debug:enter HttpGet")
 	resp, err := client.Get(url)
 	if err != nil {
 		fmt.Errorf("HttpGet(%s):%w", url, err)
@@ -60,7 +63,7 @@ func spiderJoy(url string, client *http.Client) (title, content string, err erro
 	content = strings.TrimSpace(content)
 	return title, content, nil
 }
-func SpiderPage(i int, client *http.Client) {
+func SpiderPage(i int, client *http.Client, joys chan<- string, wg *sync.WaitGroup) {
 	//明确要爬取的url
 	//https://m.pengfu.com/index_1.html
 	url := "https://m.pengfu.com/index_" + strconv.Itoa(i) + ".html"
@@ -86,19 +89,36 @@ func SpiderPage(i int, client *http.Client) {
 				fmt.Println(err)
 				continue
 			}
-			fmt.Println("title:", title)
-			fmt.Println("content:", content)
+			joys <- title + "\n" + content + "\n"
 		}
 	}
+	wg.Done()
 }
+func saveToFile(joys <-chan string) {
+	fp, err := os.Create("./joy.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer fp.Close()
 
+	for joy := range joys {
+		fp.Write([]byte(joy))
+	}
+}
 func DoWork(start, end int, client *http.Client) {
 	fmt.Printf("准备爬取第%d页到%d页的网址\n", start, end)
-
+	wg := sync.WaitGroup{}
+	joys := make(chan string)
 	for i := start; i <= end; i++ {
+		wg.Add(1)
 		//定义要给函数，爬主页面
-		SpiderPage(i, client)
+		go SpiderPage(i, client, joys, &wg)
 	}
+	go func() {
+		wg.Wait()
+		close(joys)
+	}()
+	saveToFile(joys)
 }
 
 func main() {
