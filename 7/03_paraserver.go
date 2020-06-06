@@ -25,9 +25,9 @@ func HandleConn(conn net.Conn) {
 		str := bytes.TrimFunc(buf[:n], func(r rune) bool {
 			if r == '\r' || r == '\n' {
 				return true
-			} else {
-				return false
 			}
+			return false
+
 		})
 		//windows下会自动嵌入\r\n
 		if "exit" == string(str) {
