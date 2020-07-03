@@ -1,25 +1,25 @@
 package first_response
 
 import (
-	"math/rand"
-	"strconv"
+	"fmt"
+	"runtime"
 	"testing"
 	"time"
 )
 
-func runtask() string {
-	randi := rand.Intn(1000)
-	time.Sleep(time.Millisecond * time.Duration(randi))
-	ret := "rand millisecond " + strconv.Itoa(randi)
-	return ret
+func runtask(i int) string {
+	//	rand.Seed(time.Now().UnixNano())
+	//	randi := rand.Intn(1000)
+	time.Sleep(time.Millisecond * 10)
+	//ret := "rand millisecond " + strconv.Itoa(randi)
+	return fmt.Sprintf("return task from %d", i)
 }
 func FirstResponse() string {
-	rand.Seed(time.Now().UnixNano())
 	numOfRunner := 10
-	ch := make(chan string)
+	ch := make(chan string, numOfRunner)
 	for i := 0; i < numOfRunner; i++ {
 		go func(i int) {
-			ret := runtask()
+			ret := runtask(i)
 			ch <- ret
 		}(i)
 	}
@@ -27,5 +27,15 @@ func FirstResponse() string {
 }
 
 func TestFirstResponse(t *testing.T) {
+	t.Log("before:", runtime.NumGoroutine())
 	t.Log(FirstResponse())
+	time.Sleep(time.Second)
+	t.Log("after:", runtime.NumGoroutine())
 }
+
+// func TestRandInt(t *testing.T) {
+// 	rand.Seed(time.Now().UnixNano())
+// 	for i := 0; i < 10; i++ {
+// 		t.Log("i value: ", rand.Intn(1000))
+// 	}
+// }
