@@ -16,5 +16,5 @@ func TestGetPool(t *testing.T) {
 	fmt.Printf("%v\n", o)
 	p.ReleaseObj(o)
 	t.Log(len(p.pool_ch))
-	p.ReleaseObj(o)
+	err =p.ReleaseObj(o)
 }
