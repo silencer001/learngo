@@ -7,11 +7,11 @@ func TestStraightPipeline(t *testing.T) {
 	converter := NewToIntFilter()
 	sumer := NewSumFilter()
 	sper := NewStraightPipeline("ju", spliter, converter, sumer)
-	ret, err := sper.Process("1,2,3,4")
+	ret, err := sper.Process("1,2,3,4,5")
 	if err != nil {
 		t.Fatal(err)
 	}
-	if ret != 6 {
-		t.Fatalf("the expected is 6, but the actual is %d", ret)
+	if ret != 15 {
+		t.Fatalf("the expected is 10, but the actual is %d", ret)
 	}
 }
