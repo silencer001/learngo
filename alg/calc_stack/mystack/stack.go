@@ -44,5 +44,5 @@ func (s *Stack) TopStack() (interface{}, error) {
 	if len(*s) <= 0 {
 		return nil, errors.New("s is empty")
 	}
-	return (*s)[len(*s)-1]
+	return (*s)[len(*s)-1], nil
 }
