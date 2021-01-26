@@ -2,7 +2,6 @@ package mystack
 
 import (
 	"errors"
-	"fmt"
 )
 
 type Stack []interface{}
@@ -18,7 +17,7 @@ func (s *Stack) PushStack(val interface{}) error {
 	if len(*s) >= cap(*s) {
 		return errors.New("stack is full")
 	}
-	fmt.Println("len(s):", len(*s), "cap(s)=", cap(*s))
+	//fmt.Println("len(s):", len(*s), "cap(s)=", cap(*s))
 	*s = append(*s, val)
 	return nil
 }
