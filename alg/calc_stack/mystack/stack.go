@@ -7,7 +7,7 @@ import (
 type Stack []interface{}
 
 /* return a Satck type，with len n*/
-func NewStack(n int) *Stack {
+func NewStack(n int) Stack {
 	s := make([]interface{}, 0, n)
 	p := &s
 	return (*Stack)(p)
