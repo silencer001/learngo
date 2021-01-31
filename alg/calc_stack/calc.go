@@ -126,6 +126,13 @@ func (this *Stack) IsEmpty() bool {
 		return false
 	}
 }
+func isPaire(left, right byte) bool {
+	if (left == '(' && right == ')') || (left == '[' && right == ']') || (left == '{' && right == '}') {
+		return true
+	} else {
+		return false
+	}
+}
 
 type MyQueue struct {
 	istack Stack
@@ -183,4 +190,75 @@ func (this *MyQueue) Empty() bool {
  * param_2 := obj.Pop();
  * param_3 := obj.Peek();
  * param_4 := obj.Empty();
- */
+=======
+
+}
+
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
+func middleNode(head *ListNode) *ListNode {
+	fastp := head
+	slowp := head
+	for fastp && fastp.Next != nil {
+		slowp = slowp.Next
+		fastp = fastp.Next.Next
+	}
+	return slowp
+}
+
+type MinStack struct {
+	mins []int
+	len  int
+	s    []int
+}
+
+/** initialize your data structure here. */
+func Constructor() MinStack {
+	return MinStack{
+		mins: []int{},
+		s:    []int{},
+	}
+}
+
+func (this *MinStack) Push(x int) {
+	this.s = append(this.s, x)
+	if len(mins) == 0 {
+		this.mins = append(this.mins, x)
+	} else {
+		if this.mins[len(this.mins)-1] >= x {
+			this.mins = append(this.mins, x)
+		}
+	}
+}
+
+func (this *MinStack) Pop() {
+	if len(this.s) == 0 {
+		return
+	}
+	if this.s[len(this.s)-1] == this.mins[len(this.mins)-1] {
+		this.mins = this.mins[:len(this.mins)-1]
+	}
+	this.s = this.s[:len(this.s)-1]
+
+}
+
+func (this *MinStack) Top() int {
+	return this.s[len(this.s)-1]
+}
+
+func (this *MinStack) GetMin() int {
+	return this.mins[len(this.mins)-1]
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * obj := Constructor();
+ * obj.Push(x);
+ * obj.Pop();
+ * param_3 := obj.Top();
+ * param_4 := obj.GetMin();
+>>>>>>> 6a5ddd04bbceb4a70f00e3cfdab8db08d11f1568
+*/
