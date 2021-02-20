@@ -1,5 +1,7 @@
 package mysort
 
+import "fmt"
+
 /*选择排序，每次在未排序的列表中选择最小的，放在已排序列表的末尾*/
 func SelectSort(a []int) []int {
 	for i := 0; i < len(a); i++ {
@@ -100,4 +102,38 @@ func partition2(a []int) int {
 	}
 	a[i], a[len(a)-1] = a[len(a)-1], a[i]
 	return i
+}
+
+/*计数排序：1、遍历数据，统计出每个值的个数，得到count数组
+2、然后对count数组进行累加求和，得出小于等于每个值的累计元素个数
+3、从后向前遍历数据，根据count数组的值放入相应临时数组中的index中，同时将count数组的值减1
+限制条件：a中元素均为正整数，范围有限，元素最大值小于a的个数
+*/
+func CountSort(a []int) []int {
+	/*创建count数组*/
+	max := 0
+	for _, v := range a {
+		if v > max {
+			max = v
+		}
+	}
+	fmt.Println("max", max)
+	count := make([]int, max+1)
+	//遍历a，对每个值进行统计计数
+	for _, v := range a {
+		count[v]++
+	}
+	fmt.Println("count:", count)
+	//遍历count，获得每个值的排名
+	for i := 1; i < len(count); i++ {
+		count[i] = count[i] + count[i-1]
+	}
+	fmt.Println("after count:", count)
+	res := make([]int, len(a))
+	for i := len(a) - 1; i >= 0; i-- {
+		resIndex := count[a[i]] - 1
+		res[resIndex] = a[i]
+		count[a[i]]--
+	}
+	return res
 }
