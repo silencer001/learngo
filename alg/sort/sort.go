@@ -137,3 +137,23 @@ func CountSort(a []int) []int {
 	}
 	return res
 }
+
+/*找到数组中从小到大第k个的值，时间O(N)，空间O(1)*/
+/*使用分治策略*/
+func FindK(a []int, k int) int {
+	pivot := partition2(a)
+	if pivot == k-1 {
+		return a[pivot]
+	}
+	if pivot > k-1 {
+		return FindK(a[:pivot], k)
+	} else {
+		return FindK(a[pivot+1:], k-pivot-1)
+	}
+}
+
+/*radix sort*/
+
+func radix(a []int) []int {
+
+}
