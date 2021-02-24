@@ -40,16 +40,18 @@ func BsearchRecurs(a []int, value int) int {
 	}
 	return -1
 }
+
+/*数组a中有重复元素，返回第一个等于value的下标*/
 func BsearchFirst(a []int, value int) int {
 	low := 0
 	high := len(a) - 1
 	for low <= high {
 		mid := (low + high) / 2
 		if a[mid] == value {
-			if mid > 0 && a[mid-1] == a[mid] {
-				high = mid - 1
-			} else {
+			if mid > 0 && a[mid-1] < a[mid] {
 				return mid
+			} else {
+				high = mid - 1
 			}
 		} else if a[mid] > value {
 			high = mid - 1
@@ -58,4 +60,27 @@ func BsearchFirst(a []int, value int) int {
 		}
 	}
 	return -1
+}
+
+/*数组a中的有重复元素，返回第一个等于value的下标，没有等于元素时，返回比value小的第一个下标*/
+func BsearchLow(a []int, value int) int {
+	low := 0
+	high := len(a) - 1
+	last_low := -1
+	for low <= high {
+		mid := (low + high) / 2
+		if a[mid] == value {
+			if mid > 0 && a[mid-1] < a[mid] {
+				return mid
+			} else {
+				high = mid - 1
+			}
+		} else if a[mid] > value {
+			high = mid - 1
+		} else { //a[mid] < value
+			last_low = mid
+			low = mid + 1
+		}
+	}
+	return last_low
 }
