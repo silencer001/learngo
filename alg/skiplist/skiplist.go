@@ -121,6 +121,8 @@ func (this *SkipList) SkipListInsert(score int64, ele string) {
 
 	this.length++
 }
+
+/*
 func (this *SkipList) SkipListFindNode(score int64, ele string) *SkipListNode {
 	node := this.header
 	for i := this.level - 1; i >= 0; i-- {
@@ -136,6 +138,24 @@ func (this *SkipList) SkipListFindNode(score int64, ele string) *SkipListNode {
 		}
 	}
 	return nil
+}*/
+func (this *SkipList) SkipListFindNode(score int64, ele string) *SkipListNode {
+	node := this.header
+	for i := this.level - 1; i >= 0; i-- {
+		for node.level[i].forward != nil {
+			if node.level[i].forward.score < score || (node.level[i].forward.score == score && node.level[i].forward.ele < ele) {
+				node = node.level[i].forward
+			} else {
+				break
+			}
+		}
+	}
+	node = node.level[0].forward
+	if node != nil && node.score == score && node.ele == ele {
+		return node
+	} else {
+		return nil
+	}
 }
 
 func (this *SkipList) DebugPrintSkipList() {
