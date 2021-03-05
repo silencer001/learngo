@@ -2,7 +2,8 @@ package btree
 
 import (
 	"fmt"
-	"github.com/silencer001/learngo/alg/btree/internal/myqueue"
+
+	"judeng.com/myqueue"
 )
 
 type Btree struct {
@@ -16,9 +17,9 @@ type BtreeNode struct {
 	right   *BtreeNode
 }
 
-/*前序遍历*/
-func (this *Btree) PreOrder() {
-	preOrder(this.root)
+/* PreOrder :前序遍历*/
+func (btree *Btree) PreOrder() {
+	preOrder(btree.root)
 }
 
 /*辅助函数*/
@@ -32,9 +33,9 @@ func preOrder(root *BtreeNode) {
 	return
 }
 
-/*中序遍历*/
-func (this *Btree) InOrder() {
-	inOrder(this.root)
+/* InOrder :中序遍历*/
+func (btree *Btree) InOrder() {
+	inOrder(btree.root)
 }
 func inOrder(root *BtreeNode) {
 	if root == nil {
@@ -48,8 +49,8 @@ func inOrder(root *BtreeNode) {
 
 /*后序遍历*/
 
-func (this *Btree) PostOrder() {
-	postOrder(this.root)
+func (btree *Btree) PostOrder() {
+	postOrder(btree.root)
 }
 func postOrder(root *BtreeNode) {
 	if root == nil {
@@ -61,7 +62,21 @@ func postOrder(root *BtreeNode) {
 	return
 }
 
-/*按层广度优先遍历*/
-func (this *Btree) BreadthFirstOrder() {
+/*BreadthFirstOrder : 按层广度优先遍历*/
+func (btree *Btree) BreadthFirstOrder() {
 	qu := myqueue.NewQueue()
+	if btree.root == nil {
+		return
+	}
+	qu.InQueue(btree.root)
+	for !qu.IsEmpty() {
+		node := qu.DeQueue().(BtreeNode)
+		fmt.Println(node.payload)
+		if node.left != nil {
+			qu.InQueue(node.left)
+		}
+		if node.right != nil {
+			qu.InQueue(node.right)
+		}
+	}
 }
