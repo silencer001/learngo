@@ -7,19 +7,25 @@ import (
 )
 
 type Btree struct {
-	root   *BtreeNode
-	length int
+	Root   *BtreeNode
+	Length int
 }
 
 type BtreeNode struct {
-	payload int
-	left    *BtreeNode
-	right   *BtreeNode
+	Payload int
+	Left    *BtreeNode
+	Right   *BtreeNode
+}
+
+func NewBtreeNode(v int) *BtreeNode {
+	return &BtreeNode{
+		Payload: v,
+	}
 }
 
 /* PreOrder :前序遍历*/
 func (btree *Btree) PreOrder() {
-	preOrder(btree.root)
+	preOrder(btree.Root)
 }
 
 /*辅助函数*/
@@ -27,56 +33,56 @@ func preOrder(root *BtreeNode) {
 	if root == nil { //终止条件
 		return
 	}
-	fmt.Println(root.payload)
-	preOrder(root.left)
-	preOrder(root.right)
+	fmt.Println(root.Payload)
+	preOrder(root.Left)
+	preOrder(root.Right)
 	return
 }
 
 /* InOrder :中序遍历*/
 func (btree *Btree) InOrder() {
-	inOrder(btree.root)
+	inOrder(btree.Root)
 }
 func inOrder(root *BtreeNode) {
 	if root == nil {
 		return
 	}
-	inOrder(root.left)
-	fmt.Println(root.payload)
-	inOrder(root.right)
+	inOrder(root.Left)
+	fmt.Println(root.Payload)
+	inOrder(root.Right)
 	return
 }
 
 /*后序遍历*/
 
 func (btree *Btree) PostOrder() {
-	postOrder(btree.root)
+	postOrder(btree.Root)
 }
 func postOrder(root *BtreeNode) {
 	if root == nil {
 		return
 	}
-	postOrder(root.left)
-	postOrder(root.right)
-	fmt.Println(root.payload)
+	postOrder(root.Left)
+	postOrder(root.Right)
+	fmt.Println(root.Payload)
 	return
 }
 
 /*BreadthFirstOrder : 按层广度优先遍历*/
 func (btree *Btree) BreadthFirstOrder() {
 	qu := myqueue.NewQueue()
-	if btree.root == nil {
+	if btree.Root == nil {
 		return
 	}
-	qu.InQueue(btree.root)
+	qu.InQueue(btree.Root)
 	for !qu.IsEmpty() {
 		node := qu.DeQueue().(BtreeNode)
-		fmt.Println(node.payload)
-		if node.left != nil {
-			qu.InQueue(node.left)
+		fmt.Println(node.Payload)
+		if node.Left != nil {
+			qu.InQueue(node.Left)
 		}
-		if node.right != nil {
-			qu.InQueue(node.right)
+		if node.Right != nil {
+			qu.InQueue(node.Right)
 		}
 	}
 }
