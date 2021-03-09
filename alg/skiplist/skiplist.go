@@ -82,7 +82,6 @@ func (this *SkipList) SkipListInsert(score int64, ele string) {
 	}
 	/*创建节点*/
 	myLevel := randomLevel()
-	fmt.Printf("mylevel:%d\n", myLevel)
 	node := NewSkipListNode(myLevel, score, ele)
 	/*更新update和rank*/
 	if myLevel > this.level {
@@ -139,6 +138,7 @@ func (this *SkipList) SkipListFindNode(score int64, ele string) *SkipListNode {
 	}
 	return nil
 }*/
+/*更清晰的计算方式*/
 func (this *SkipList) SkipListFindNode(score int64, ele string) *SkipListNode {
 	node := this.header
 	for i := this.level - 1; i >= 0; i-- {
@@ -156,6 +156,45 @@ func (this *SkipList) SkipListFindNode(score int64, ele string) *SkipListNode {
 	} else {
 		return nil
 	}
+}
+func (this *SkipList) SkipListDelNode(score int64, ele string) int {
+	update := make([]*SkipListNode, SKIPLIST_MAX_LEVEL)
+	x := this.header
+	for i := this.level - 1; i >= 0; i-- {
+		for x.level[i].forward != nil {
+			if x.level[i].forward.score < score || (x.level[i].forward.score == score && x.level[i].forward.ele < ele) {
+				x = x.level[i].forward
+			} else {
+				break
+			}
+		}
+		update[i] = x //如果是header节点，实际上是不更新的
+	}
+	x = x.level[0].forward
+	if x == nil || x.score != score || x.ele != ele {
+		return 0
+	}
+	/*首先更新update[i]的中x.level以下的forwar指针和span*/
+	for i := 0; i < len(x.level); i++ {
+		update[i].level[i].forward = x.level[i].forward
+		update[i].level[i].span += x.level[i].span - 1
+
+	}
+	for i := len(x.level); i < this.level; i++ {
+		update[i].level[i].span--
+	}
+	/*更新backward指针*/
+	if x.level[0].forward != nil {
+		x.level[0].forward.backward = update[0]
+	} else { //尾指针
+		this.tail = update[0]
+	}
+	/*更新this.level记录:删除节点可能导致跳表的level降低*/
+	for this.level > 1 && this.header.level[this.level-1].forward == nil {
+		this.level--
+	}
+	this.length--
+	return 1
 }
 
 func (this *SkipList) DebugPrintSkipList() {

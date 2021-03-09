@@ -53,3 +53,24 @@ func TestSkipListFindNode(t *testing.T) {
 		fmt.Println("not found")
 	}
 }
+
+func TestSkipListDelNode(t *testing.T) {
+	sl := NewSkipList()
+	sl.SkipListInsert(1, "a")
+	sl.SkipListInsert(2, "b")
+	sl.SkipListInsert(10, "c")
+	sl.SkipListInsert(2, "d")
+	sl.SkipListInsert(3, "e")
+	sl.SkipListInsert(5, "f")
+	sl.SkipListInsert(4, "g")
+	sl.SkipListInsert(11, "h")
+	sl.SkipListInsert(18, "i")
+	sl.SkipListInsert(15, "j")
+	sl.SkipListInsert(30, "k")
+	sl.SkipListInsert(9, "l")
+	sl.DebugPrintSkipList()
+
+	sl.SkipListDelNode(3, "e")
+	fmt.Printf("\n\n")
+	sl.DebugPrintSkipList()
+}
