@@ -43,10 +43,13 @@ func (heap *Heap) heapify(j int) {
 	}
 }
 func (heap *Heap) heapifyTop() {
-	for i := 1; i <= heap.len/2; i = i * 2 {
+	for i := 1; i <= heap.len/2; {
 		minson := heap.minSon(i)
 		if heap.s[i] > heap.s[minson] {
 			heap.s[i], heap.s[minson] = heap.s[minson], heap.s[i]
+			i = minson
+		} else {
+			break
 		}
 	}
 }
