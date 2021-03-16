@@ -20,8 +20,9 @@ func (list *List) AddNodeTail(data int) {
 	node := &ListNode{data: data}
 	if list.tail != nil {
 		list.tail.forward = node
+		node.backward = list.tail
 	}
-	node.backward = list.tail
+	list.tail = node
 
 	if list.head == nil {
 		list.head = node
@@ -43,6 +44,14 @@ func (list *List) DelNode(node *ListNode) {
 	list.len--
 }
 
+func (list *List) FindNode(data int) *ListNode {
+	for iter := list.head; iter != nil; iter = iter.forward {
+		if iter.data == data {
+			return iter
+		}
+	}
+	return nil
+}
 func (list *List) NewIter() *ListNode {
 	return list.head
 }
