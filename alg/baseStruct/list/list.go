@@ -42,3 +42,11 @@ func (list *List) DelNode(node *ListNode) {
 	}
 	list.len--
 }
+
+func (list *List) NewIter() *ListNode {
+	return list.head
+}
+
+func (list *List) IterNext(iter *ListNode) *ListNode {
+	return iter.forward
+}
