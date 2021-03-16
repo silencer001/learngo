@@ -1,0 +1,13 @@
+github.com/silencer001/learngo v0.0.0-20210316055800-87d328f0b8b8 h1:oS6GjvXAf20pMiMb8wsNf3NQy/IZifuJ4EBMr6NRk/8=
+github.com/silencer001/learngo v0.0.0-20210316081247-6a26d7833b96 h1:qh0ybXb+4QP8dMDGj8Eu+T55H9UjYCYo7iU/gizj7ZI=
+github.com/silencer001/learngo v0.0.0-20210316081247-6a26d7833b96/go.mod h1:pL7VFS3uvY4aolo58kJkkzHmW/Wtm78WSqM17B3h1TU=
+github.com/silencer001/learngo/alg/baseStruct/list v0.0.0-20210316055800-87d328f0b8b8 h1:DFDSFkZthyxbdDDEmNC6qCmeYr+JepBzHlOjwL3TWlY=
+github.com/silencer001/learngo/alg/baseStruct/list v0.0.0-20210316055800-87d328f0b8b8/go.mod h1:4P0oo6dcd28Ik8lhjSFgXg8b0tot64JwJFxpwp18jNo=
+github.com/silencer001/learngo/alg/baseStruct/list v0.0.0-20210316073410-bfed4c6eb400 h1:cd0Gv95CCmMfj3tQKhn7btwgCynPk89L24s962/RsCE=
+github.com/silencer001/learngo/alg/baseStruct/list v0.0.0-20210316073410-bfed4c6eb400/go.mod h1:4P0oo6dcd28Ik8lhjSFgXg8b0tot64JwJFxpwp18jNo=
+github.com/silencer001/learngo/alg/baseStruct/list v0.0.0-20210316081247-6a26d7833b96 h1:8hktQHurHOaMDMtNF2kxfuL+VDGFXo75NavA2qscfL4=
+github.com/silencer001/learngo/alg/baseStruct/list v0.0.0-20210316081247-6a26d7833b96/go.mod h1:4P0oo6dcd28Ik8lhjSFgXg8b0tot64JwJFxpwp18jNo=
+github.com/silencer001/learngo/alg/baseStruct/queue v0.0.0-20210316055800-87d328f0b8b8 h1:5o6+0bMAi17BJGnFP42uiVyDQr6qJ+vU0tBgjFkcEvY=
+github.com/silencer001/learngo/alg/baseStruct/queue v0.0.0-20210316055800-87d328f0b8b8/go.mod h1:l/vnOd8/fpseTNd8AX3r5Pm6tTQcvhQYMdCSykZRis8=
+github.com/silencer001/learngo/alg/baseStruct/queue v0.0.0-20210316073410-bfed4c6eb400 h1:hhmU6OyY9yUZlPotC9LKtHexQ6XZMR6ghQ5ICTVIHl0=
+github.com/silencer001/learngo/alg/baseStruct/queue v0.0.0-20210316073410-bfed4c6eb400/go.mod h1:l/vnOd8/fpseTNd8AX3r5Pm6tTQcvhQYMdCSykZRis8=
