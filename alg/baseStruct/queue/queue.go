@@ -1,4 +1,4 @@
-package myqueue
+package queue
 
 /*Queue : 内部队列结构*/
 type Queue struct {
