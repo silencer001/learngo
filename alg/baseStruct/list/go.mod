@@ -1,3 +1,3 @@
-module github.com/silencer001/leargo/alg/baseStruct/list
+module github.com/silencer001/learngo/alg/baseStruct/list
 
 go 1.14
