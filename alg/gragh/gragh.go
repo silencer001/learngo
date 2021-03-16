@@ -83,6 +83,13 @@ func (gragh *Gragh) Dfs(s, t int) []int {
 		prev[i] = -1
 	}
 	visited[s] = true
+	/*
+			var ff = func (int) {
+		        ff()
+		    }
+			此时编译会报错，为什么呢：
+			We've written >100k lines of Go code and it has come up maybe once. That kind of frequency doesn't suggest that a language change is warranted.
+	*/
 	type functype func(s, t int)
 	var dfs functype //必须先声明函数变量，再递归调用，否则编译不通过
 	found := false
