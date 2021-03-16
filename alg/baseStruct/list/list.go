@@ -50,3 +50,7 @@ func (list *List) NewIter() *ListNode {
 func (list *List) IterNext(iter *ListNode) *ListNode {
 	return iter.forward
 }
+
+func (node *ListNode) Data() int {
+	return node.data
+}
