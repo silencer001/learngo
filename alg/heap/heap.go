@@ -56,7 +56,14 @@ func (heap *Heap) heapifyTop() {
 func (heap *Heap) Push(v int) {
 	heap.s = append(heap.s, v)
 	heap.len++
-	heap.heapify(heap.len / 2)
+	for i := heap.len; i > 0; {
+		if heap.s[i/2] > heap.s[i] {
+			heap.s[i], heap.s[i/2] = heap.s[i/2], heap.s[i]
+			i = i / 2 //交换玩以后，比较父节点
+		} else {
+			break
+		}
+	}
 }
 
 func (heap *Heap) PopTop() int {
