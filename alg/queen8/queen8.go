@@ -35,25 +35,28 @@ func Queen8() []int {
 	}
 	type sugarfunc func(int) bool
 	var search sugarfunc
-	search = func(start int) bool {
+	search = func(column int) bool {
 		for i := 0; i < 8; i++ {
-			fmt.Println("row:", i)
-			queen[start][i] = 1
+			//fmt.Println("row:", i)
+			queen[column][i] = 1
 			//验证是否有冲突
-			if conflict(start, i) {
-				queen[start][i] = 0
+			if conflict(column, i) {
+				queen[column][i] = 0
 				continue
 			} else {
-				if search(start + 1) {
+				if column == 7 {
+					return true
+				}
+				if search(column + 1) {
 
 					return true
 				} else {
-					queen[start][i] = 0
+					queen[column][i] = 0
 					continue
 				}
 			}
 		}
-		fmt.Println("not found at column:", start)
+		//fmt.Println("not found at column:", column)
 		return false
 	}
 	res := make([]int, 8)
@@ -67,6 +70,12 @@ func Queen8() []int {
 				break
 			}
 		}
+	}
+	for i := 0; i < 8; i++ {
+		for j := 0; j < 8; j++ {
+			fmt.Printf("%d  ", queen[i][j])
+		}
+		fmt.Println()
 	}
 
 	return res
