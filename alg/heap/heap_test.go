@@ -24,4 +24,7 @@ func TestBuildHeap(t *testing.T) {
 	fmt.Println(h.PopTop())
 	fmt.Println(h.PopTop())
 	fmt.Println(h.s)
+	fmt.Println(h.PopTop())
+	fmt.Println(h.PopTop())
+	fmt.Println(h.PopTop())
 }
