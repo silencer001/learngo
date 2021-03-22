@@ -6,6 +6,11 @@ import (
 )
 
 func TestPack01(t *testing.T) {
-	iterms := []int{10, 14, 20, 25, 30, 1, 2}
-	fmt.Println(Pack01(iterms, 35))
+	iterms := []int{10, 4, 5, 6, 7, 3, 1}
+	fmt.Println(Pack01(iterms, 9))
+}
+
+func TestPack01Optimized(t *testing.T) {
+	iterms := []int{10, 4, 5, 6, 7, 3, 1}
+	fmt.Println(Pack01Optimized(iterms, 9))
 }
