@@ -19,10 +19,17 @@ func TestCountPalindromicSubsequences(t *testing.T) {
 
 func TestLongestPalindrome(t *testing.T) {
 	fmt.Println(longestPalindrome("aabab"))
-	fmt.Println(longestPalindrome("aa"))
+	fmt.Println(longestPalindrome("aaaa"))
 	fmt.Println(longestPalindrome("a"))
 	fmt.Println(longestPalindrome("a123aasgasdfgwerasdfasdf"))
 	fmt.Println(longestPalindrome("cbbd"))
 	fmt.Println(longestPalindrome("ccc"))
 	fmt.Println(longestPalindrome("cccbb"))
+}
+
+func TestIsMatch(t *testing.T) {
+	fmt.Println(isMatch("aa", "a"))
+	fmt.Println(isMatch("aa", "a*"))
+	fmt.Println(isMatch("aab", "c*a*b"))
+	fmt.Println(isMatch("aaa", "ab*a*c*a"))
 }
