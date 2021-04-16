@@ -1,6 +1,8 @@
 package dp
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func myAtoi(s string) int {
 	negflag := false
@@ -579,4 +581,308 @@ func isMatch(s string, p string) bool {
 		}
 	}
 	return dp[len(s)][len(p)]
+}
+
+/*
+给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+
+
+示例 1：
+
+输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
+输出：6
+解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
+示例 2：
+
+输入：nums = [1]
+输出：1
+示例 3：
+
+输入：nums = [0]
+输出：0
+示例 4：
+
+输入：nums = [-1]
+输出：-1
+示例 5：
+
+输入：nums = [-100000]
+输出：-100000
+
+
+提示：
+
+1 <= nums.length <= 3 * 104
+-105 <= nums[i] <= 105
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/maximum-subarray
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+
+/*
+O(n)时间复杂度的算法：遍历整个数组，计算连续子序列之和为cur，如果cur小于0，则子序列从当前下标开始，
+因为cur为负的子序列只会让最大子序列和变小，必然不属于最大子序列的子集；但cur不管正负，都可能是max
+比较max 和cur大小
+*/
+func maxsubArray(nums []int) int {
+	max := nums[0]
+	//start, end := 0, 0
+	cur := nums[0]
+	for i := 1; i < len(nums); i++ {
+		if cur < 0 {
+			//start = i
+			cur = nums[i]
+		} else {
+			cur += nums[i]
+		}
+
+		if max < cur {
+			max = cur
+		}
+
+	}
+	return max
+}
+
+/*使用动态规划的解法：
+子序列存在最优子结构、重复子结构问题，因此考虑动态规划
+转移方程：第n个值的最大连续连续值为
+f(n)= nums[n] 当f(n-1)<0时，nums[n]+f(n-1),当f(n-1)>0
+转移数组，下标代表n，值为包含n的最大子序列和
+同样是O(n)时间复杂度，但空间复杂度为O(n)
+*/
+
+func maxsubArray1(nums []int) int {
+	dp := make([]int, len(nums))
+	dp[0] = nums[0]
+	max := nums[0]
+	for i := 1; i < len(nums); i++ {
+		if dp[i-1] > 0 {
+			dp[i] = dp[i-1] + nums[i]
+		} else {
+			dp[i] = nums[i]
+		}
+		if max < dp[i] {
+			max = dp[i]
+		}
+	}
+	return max
+}
+
+/*
+假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+
+注意：给定 n 是一个正整数。
+
+示例 1：
+
+输入： 2
+输出： 2
+解释： 有两种方法可以爬到楼顶。
+1.  1 阶 + 1 阶
+2.  2 阶
+示例 2：
+
+输入： 3
+输出： 3
+解释： 有三种方法可以爬到楼顶。
+1.  1 阶 + 1 阶 + 1 阶
+2.  1 阶 + 2 阶
+3.  2 阶 + 1 阶
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/climbing-stairs
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+/*
+存在最优子结构和重复子结果，考虑动态规划
+f(n-1)种方法再上一个台阶
+f(n-2)种方法再上两个台阶
+因此f(n)=f(n-1)+f(n-2)
+*/
+func climbStairs(n int) int {
+	dp := make([]int, n+1)
+	dp[0] = 1
+	dp[1] = 1
+	for i := 2; i <= n; i++ {
+		dp[i] = dp[i-1] + dp[i-2]
+	}
+	return dp[n]
+}
+
+/*继续优化，使用O(1)的空间*/
+func climbStairs1(n int) int {
+	if n == 1 {
+		return 1
+	}
+	dp0 := 1
+	dp1 := 1
+	dpn := 0
+	for i := 2; i <= n; i++ {
+		dpn = dp0 + dp1
+		dp0 = dp1
+		dp1 = dpn
+	}
+	return dpn
+}
+
+/*
+给你一个只包含 '(' 和 ')' 的字符串，找出最长有效（格式正确且连续）括号子串的长度。
+
+
+
+示例 1：
+
+输入：s = "(()"
+输出：2
+解释：最长有效括号子串是 "()"
+示例 2：
+
+输入：s = ")()())"
+输出：4
+解释：最长有效括号子串是 "()()"
+示例 3：
+
+输入：s = ""
+输出：0
+
+
+提示：
+
+0 <= s.length <= 3 * 104
+s[i] 为 '(' 或 ')'
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/longest-valid-parentheses
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+
+/*
+针对每个)算动态转移方程
+f(n)= 2 //当n-1为(且n-2为(
+f(n)= 2+f(n-2) //当n-1为(且n-2为)
+f(n)= 2+f(n-1)//当n-1为)，且n-f(n-1)为(
+f(n)=  f(n-1)//当n-1为),且n-f(n-1)为)
+*/
+
+func longestValidParentheses(s string) int {
+	var max int = 0
+	if len(s) < 2 {
+		return 0
+	}
+	dp := make([]int, len(s))
+	if s[0] == '(' && s[1] == ')' {
+		dp[1] = 2
+		max = 2
+	}
+	for i := 2; i < len(s); i++ {
+		if s[i] == '(' {
+			continue
+		}
+		if s[i-1] == '(' {
+			if s[i-2] == '(' {
+				dp[i] = 2
+			} else {
+				dp[i] = dp[i-2] + 2
+			}
+		} else { //)
+			if i-1-dp[i-1] >= 0 && s[i-1-dp[i-1]] == '(' {
+				dp[i] = dp[i-1] + 2
+				if i-1-dp[i-1]-1 >= 0 {
+					dp[i] += dp[i-1-dp[i-1]-1]
+				}
+			} else {
+				dp[i] = 0
+			}
+		}
+		if max < dp[i] {
+			max = dp[i]
+		}
+	}
+	return max
+}
+
+/*
+给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+
+
+
+示例 1：
+
+
+
+输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]
+输出：6
+解释：上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。
+示例 2：
+
+输入：height = [4,2,0,3,2,5]
+输出：9
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/trapping-rain-water
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+func trap(height []int) int {
+	findtop := func(h []int) int {
+		max := 0
+		for i := 1; i < len(h); i++ {
+			if h[i] > h[max] {
+				max = i
+			}
+		}
+		return max
+	}
+	w := 0
+	type recallFunc func(int, int, bool)
+	var recall recallFunc
+	recall = func(start, end int, startIsMax bool) {
+		if end-start <= 1 {
+			return
+		}
+		if end-start == 2 { //只有三个值时，直接计算出w
+			debug := 0
+			if startIsMax {
+				if height[start+1] < height[end] {
+					w += height[end] - height[start+1]
+					debug = height[end] - height[start+1]
+				}
+			} else {
+				if height[start+1] < height[start] { //end为最大值，如果start大于中间值，则有雨水
+					w += height[start] - height[start+1]
+					debug = height[start] - height[start+1]
+				}
+			}
+			fmt.Println("slice:", height[start:end+1], " w=", debug)
+			return
+		}
+		if startIsMax {
+			debug := 0
+			max2 := findtop(height[start+1:end+1]) + start + 1
+			for i := start + 1; i < max2; i++ {
+				w += height[max2] - height[i]
+				debug += height[max2] - height[i]
+			}
+			fmt.Println("slice:", height[start:max2+1], " w=", w)
+			recall(max2, end, true)
+		} else {
+			max2 := findtop(height[start:end]) + start
+			debug := 0
+			for i := max2 + 1; i < end; i++ {
+				w += height[max2] - height[i]
+				debug += height[max2] - height[i]
+			}
+			fmt.Println("slice:", height[start:max2+1], " w=", debug)
+			recall(start, max2, false)
+		}
+	}
+
+	max := findtop(height)
+	recall(0, max, false)
+	recall(max, len(height)-1, true)
+	return w
 }
