@@ -886,3 +886,308 @@ func trap(height []int) int {
 	recall(max, len(height)-1, true)
 	return w
 }
+
+/*
+给定一个字符串 (s) 和一个字符模式 (p) ，实现一个支持 '?' 和 '*' 的通配符匹配。
+
+'?' 可以匹配任何单个字符。
+'*' 可以匹配任意字符串（包括空字符串）。
+两个字符串完全匹配才算匹配成功。
+
+说明:
+
+s 可能为空，且只包含从 a-z 的小写字母。
+p 可能为空，且只包含从 a-z 的小写字母，以及字符 ? 和 *。
+示例 1:
+
+输入:
+s = "aa"
+p = "a"
+输出: false
+解释: "a" 无法匹配 "aa" 整个字符串。
+示例 2:
+
+输入:
+s = "aa"
+p = "*"
+输出: true
+解释: '*' 可以匹配任意字符串。
+示例 3:
+
+输入:
+s = "cb"
+p = "?a"
+输出: false
+解释: '?' 可以匹配 'c', 但第二个 'a' 无法匹配 'b'。
+示例 4:
+
+输入:
+s = "adceb"
+p = "*a*b"
+输出: true
+解释: 第一个 '*' 可以匹配空字符串, 第二个 '*' 可以匹配字符串 "dce".
+示例 5:
+
+输入:
+s = "acdcb"
+p = "a*c?b"
+输出: false
+"abcabczzzde"
+"*abc???de*"
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/wildcard-matching
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+/*
+s的下标为i，p的下标为j
+转移方程f(i,j)=f(i-1,j-1)&&{match(s[i],p[j]} || f(i-1,j)&&p[j]==*
+转移矩阵需要考虑空字符串的情况
+
+*/
+func isMatch1(s string, p string) bool {
+	sl := len(s)
+	pl := len(p)
+	dp := make([][]bool, sl+1)
+	for i, _ := range dp {
+		dp[i] = make([]bool, pl+1)
+	}
+	dp[0][0] = true
+	for j := 1; j <= pl; j++ {
+		if dp[0][j-1] && p[j-1] == '*' {
+			dp[0][j] = true
+		} else {
+			break
+		}
+	}
+	for i := 1; i <= sl; i++ {
+		for j := 1; j <= pl; j++ {
+			if dp[i-1][j-1] {
+				if s[i-1] == p[j-1] || p[j-1] == '*' || p[j-1] == '?' {
+					dp[i][j] = true
+					continue
+				}
+			}
+			if p[j-1] == '*' {
+				if dp[i-1][j] || dp[i][j-1] {
+					dp[i][j] = true
+				}
+			}
+		}
+	}
+	//fmt.Println(dp)
+	return dp[sl][pl]
+}
+
+/*
+你需要制定一份 d 天的工作计划表。工作之间存在依赖，要想执行第 i 项工作，你必须完成全部 j 项工作（ 0 <= j < i）。
+
+你每天 至少 需要完成一项任务。工作计划的总难度是这 d 天每一天的难度之和，而一天的工作难度是当天应该完成工作的最大难度。
+
+给你一个整数数组 jobDifficulty 和一个整数 d，分别代表工作难度和需要计划的天数。第 i 项工作的难度是 jobDifficulty[i]。
+
+返回整个工作计划的 最小难度 。如果无法制定工作计划，则返回 -1 。
+
+
+
+示例 1：
+
+
+
+输入：jobDifficulty = [6,5,4,3,2,1], d = 2
+输出：7
+解释：第一天，您可以完成前 5 项工作，总难度 = 6.
+第二天，您可以完成最后一项工作，总难度 = 1.
+计划表的难度 = 6 + 1 = 7
+示例 2：
+
+输入：jobDifficulty = [9,9,9], d = 4
+输出：-1
+解释：就算你每天完成一项工作，仍然有一天是空闲的，你无法制定一份能够满足既定工作时间的计划表。
+示例 3：
+
+输入：jobDifficulty = [1,1,1], d = 3
+输出：3
+解释：工作计划为每天一项工作，总难度为 3 。
+示例 4：
+
+输入：jobDifficulty = [7,1,7,1,7,1], d = 3
+输出：15
+示例 5：
+
+输入：jobDifficulty = [11,111,22,222,33,333,44,444], d = 6
+输出：843
+
+
+提示：
+
+1 <= jobDifficulty.length <= 300
+0 <= jobDifficulty[i] <= 1000
+1 <= d <= 10
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/minimum-difficulty-of-a-job-schedule
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+/*
+第n天从0到i的最小难度为dp(i,n)
+dp(i,n)=min(dp(i-k,n-1)+cost(k,i)),n-1<=k<=i
+状态转移矩阵
+以n为阶，i为状态；初始值dp[0][0]=0,dp[]
+*/
+func minDifficulty(jobDifficulty []int, d int) int {
+	jobs := len(jobDifficulty)
+	if jobs < d {
+		return -1
+	}
+	dp := make([][]int, d)
+	for i, _ := range dp {
+		dp[i] = make([]int, jobs)
+	}
+	maxs := make([][]int, jobs)
+	for i, _ := range maxs {
+		maxs[i] = make([]int, jobs)
+	}
+	for i := 0; i < jobs; i++ {
+		for j := i; j < jobs; j++ {
+			if i == j {
+				maxs[i][j] = jobDifficulty[j]
+			} else {
+				if jobDifficulty[j] > maxs[i][j-1] {
+					maxs[i][j] = jobDifficulty[j]
+				} else {
+					maxs[i][j] = maxs[i][j-1]
+				}
+			}
+		}
+	}
+	fmt.Println(maxs)
+	for i := 0; i < jobs; i++ {
+		dp[0][i] = maxs[0][i]
+	}
+	for n := 1; n < d; n++ {
+		for j := 1; j < jobs; j++ {
+			for k := 1; k <= j-n+1; k++ {
+				if dp[n][j] == 0 || dp[n][j] > dp[n-1][j-k]+maxs[j-k+1][j] {
+					dp[n][j] = dp[n-1][j-k] + maxs[j-k+1][j]
+				}
+			}
+		}
+	}
+	for i := 0; i < d; i++ {
+		fmt.Println(dp[i])
+	}
+	return dp[d-1][jobs-1]
+}
+
+/*背包问题*/
+func pack(w int, n []int, v []int) int {
+	dp := make([]int, w)
+	for i, _ := range dp {
+		dp[i] = -1
+	}
+	dp[0] = 0
+	for i := 0; i < len(n); i++ {
+		for j := w - n[i]; j >= 0; j-- {
+			if dp[j] != -1 {
+				dp[j+n[i]] = max(dp[j]+v[i], dp[j+n[i]], -1)
+			}
+		}
+	}
+	for j := w; j >= 0; j-- {
+		if dp[j] != -1 {
+			return dp[j]
+		}
+	}
+	return -1
+}
+
+/*
+给你两个单词 word1 和 word2，请你计算出将 word1 转换成 word2 所使用的最少操作数 。
+
+你可以对一个单词进行如下三种操作：
+
+插入一个字符
+删除一个字符
+替换一个字符
+
+
+示例 1：
+
+输入：word1 = "horse", word2 = "ros"
+输出：3
+解释：
+horse -> rorse (将 'h' 替换为 'r')
+rorse -> rose (删除 'r')
+rose -> ros (删除 'e')
+示例 2：
+
+输入：word1 = "intention", word2 = "execution"
+输出：5
+解释：
+intention -> inention (删除 't')
+inention -> enention (将 'i' 替换为 'e')
+enention -> exention (将 'n' 替换为 'x')
+exention -> exection (将 'n' 替换为 'c')
+exection -> execution (插入 'u')
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/edit-distance
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+
+func minDistance(word1 string, word2 string) int {
+	min := func(a, b, c int) int {
+		k := a
+		if k > b {
+			k = b
+		}
+		if k > c {
+			k = c
+		}
+		return k
+	}
+	len1 := len(word1)
+	len2 := len(word2)
+	if len1 == 0 {
+		return len2
+	}
+	if len2 == 0 {
+		return len1
+	}
+	dp := make([][]int, len(word1))
+	for i, _ := range dp {
+		dp[i] = make([]int, len2)
+	}
+	if word1[0] == word2[0] {
+		dp[0][0] = 0
+	} else {
+		dp[0][0] = 1
+	}
+	for i := 1; i < len1; i++ {
+		if word1[i] == word2[0] {
+			dp[i][0] = i
+		} else {
+			dp[i][0] = dp[i-1][0] + 1
+		}
+	}
+	for j := 1; j < len2; j++ {
+		if word2[j] == word1[0] {
+			dp[0][j] = j
+		} else {
+			dp[0][j] = dp[0][j-1] + 1
+		}
+	}
+	for i := 1; i < len1; i++ {
+		for j := 1; j < len2; j++ {
+			x := 0
+			if word1[i] == word2[j] {
+				x = dp[i-1][j-1]
+			} else {
+				x = dp[i-1][j-1] + 1
+			}
+			dp[i][j] = min(dp[i-1][j]+1, dp[i][j-1]+1, x)
+		}
+	}
+	return dp[len1-1][len2-1]
+}

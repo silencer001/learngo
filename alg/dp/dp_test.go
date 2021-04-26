@@ -58,3 +58,24 @@ func TestTrap(t *testing.T) {
 	fmt.Println(trap([]int{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}))
 	fmt.Println(trap([]int{4, 2, 0, 3, 2, 5}))
 }
+
+func TestIsMatch1(t *testing.T) {
+	fmt.Println(isMatch1("aa", "a*"))
+	fmt.Println(isMatch1("aa", ""))
+	fmt.Println(isMatch1("aab", "*"))
+	fmt.Println(isMatch1("acdcb", "a*c?b"))
+	fmt.Println(isMatch1("adceb", "*a*b"))
+	fmt.Println(isMatch1("aa", "a"))
+	fmt.Println(isMatch1("", ""))
+	fmt.Println(isMatch1("a", ""))
+	fmt.Println(isMatch1("abcabczzzde", "*abc???de*"))
+}
+
+func TestMinDifficulty(t *testing.T) {
+	fmt.Println(minDifficulty([]int{11, 111, 22, 222, 33, 333, 44, 444}, 6))
+}
+
+func TestMinDistance(t *testing.T) {
+	fmt.Println(minDistance("abcde", "ebcde"))
+	fmt.Println(minDistance("sea", "eat"))
+}
