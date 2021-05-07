@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"judeng.com/myqueue"
+	"judeng.com/mystack"
 )
 
 type Btree struct {
@@ -51,6 +52,15 @@ func inOrder(root *BtreeNode) {
 	fmt.Println(root.Payload)
 	inOrder(root.Right)
 	return
+}
+
+/*非递归方式中序遍历*/
+func (btree *Btree) InOrder() {
+	p := btree.Root
+	s := mystack.NewStack()
+	for p != nil || !s.IsEmpty() {
+
+	}
 }
 
 /*后序遍历*/
