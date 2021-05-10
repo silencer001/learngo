@@ -18,6 +18,13 @@ type BtreeNode struct {
 	Right   *BtreeNode
 }
 
+func NewBtree() *Btree {
+	return &Btree{
+		Root:   nil,
+		Length: 0,
+	}
+}
+
 func NewBtreeNode(v int) *BtreeNode {
 	return &BtreeNode{
 		Payload: v,
@@ -54,12 +61,39 @@ func inOrder(root *BtreeNode) {
 	return
 }
 
-/*非递归方式中序遍历*/
-func (btree *Btree) InOrder() {
+/*非递归方式前序遍历*/
+func (btree *Btree) PreOrderNorecur() {
 	p := btree.Root
-	s := mystack.NewStack()
+	s := mystack.NewStack(1024)
 	for p != nil || !s.IsEmpty() {
+		for p != nil {
+			fmt.Println(p.Payload)
+			s.Push(p)
+			p = p.Left
+		}
+		if !s.IsEmpty() {
+			x, _ := s.Pop()
+			p = x.(*BtreeNode)
+			p = p.Right
+		}
+	}
+}
 
+/*非递归方式中序遍历*/
+func (btree *Btree) InOrderNorecur() {
+	p := btree.Root
+	s := mystack.NewStack(1024)
+	for p != nil || !s.IsEmpty() {
+		for p != nil {
+			s.Push(p)
+			p = p.Left
+		}
+		if !s.IsEmpty() {
+			x, _ := s.Pop()
+			p = x.(*BtreeNode)
+			fmt.Println(p.Payload)
+			p = p.Right
+		}
 	}
 }
 
