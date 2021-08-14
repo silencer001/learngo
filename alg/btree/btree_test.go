@@ -21,3 +21,26 @@ func TestInOrder(t *testing.T) {
 	fmt.Println()
 	bt.PreOrderNorecur()
 }
+
+func TestPostOrder(t *testing.T) {
+	bt := NewBtree()
+	bt.Root = NewBtreeNode(5)
+	bt.Root.Left = NewBtreeNode(3)
+	bt.Root.Right = NewBtreeNode(7)
+	bt.Root.Left.Right = NewBtreeNode(4)
+	bt.Root.Right.Left = NewBtreeNode(6)
+	bt.Root.Right.Right = NewBtreeNode(8)
+	bt.PostOrder()
+	PostOrder2(bt.Root)
+}
+
+func TestDepthFirstOrder(t *testing.T) {
+	bt := NewBtree()
+	bt.Root = NewBtreeNode(5)
+	bt.Root.Left = NewBtreeNode(3)
+	bt.Root.Right = NewBtreeNode(7)
+	bt.Root.Left.Right = NewBtreeNode(4)
+	bt.Root.Right.Left = NewBtreeNode(6)
+	bt.Root.Right.Right = NewBtreeNode(8)
+	bt.DepthFirstOrder()
+}

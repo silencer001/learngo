@@ -112,6 +112,37 @@ func postOrder(root *BtreeNode) {
 	return
 }
 
+/*先写个后续遍历的循环方法吧*/
+
+func PostOrder2(root *BtreeNode) {
+	fmt.Println()
+	stack := make([]*BtreeNode, 0)
+	p := root
+	var prev *BtreeNode
+	for p != nil || len(stack) > 0 {
+		for p != nil {
+			fmt.Println("Push: ", p.Payload)
+			stack = append(stack, p)
+			p = p.Left
+		}
+		if len(stack) > 0 {
+			p = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			fmt.Println("Pop: ", p.Payload)
+			if (p.Right == nil) || p.Right == prev { //已经遍历过p
+				fmt.Printf("visited:%d\n", p.Payload)
+				prev = p
+				p = nil
+			} else {
+				fmt.Println("Push: ", p.Payload)
+				stack = append(stack, p) //重新push后，遍历右子树
+				p = p.Right
+			}
+		}
+	}
+	fmt.Println()
+}
+
 /*BreadthFirstOrder : 按层广度优先遍历*/
 func (btree *Btree) BreadthFirstOrder() {
 	qu := myqueue.NewQueue()
@@ -127,6 +158,24 @@ func (btree *Btree) BreadthFirstOrder() {
 		}
 		if node.Right != nil {
 			qu.InQueue(node.Right)
+		}
+	}
+}
+
+/*DepthFirstOrder : 深度优先遍历 */
+
+func (btree *Btree) DepthFirstOrder() {
+	s := mystack.NewStack(100)
+	s.Push(btree.Root)
+	for !s.IsEmpty() {
+		x, _ := s.Pop()
+		p := x.(*BtreeNode)
+		fmt.Println(p.Payload)
+		if p.Left != nil {
+			s.Push(p.Left)
+		}
+		if p.Right != nil {
+			s.Push(p.Right)
 		}
 	}
 }
